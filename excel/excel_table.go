@@ -124,7 +124,7 @@ func setTableSheetFooter(file *excelize.File, sheetName string, startIdx int) (i
 }
 
 // setTableSheetLayout : 테이블 시트 레이아웃 설정
-func setTableSheetLayout(file *excelize.File, schema, sheetName string, tableName, tableComment string) {
+func setTableSheetLayout(file *excelize.File, schema, sheetName, tableName, tableComment string) {
 	// title column
 	file.MergeCell(sheetName, fmt.Sprint("A", titleColNum), fmt.Sprint("I", titleColNum))
 	file.SetCellValue(sheetName, fmt.Sprint("A", titleColNum), "Table Specification")
@@ -177,15 +177,14 @@ func setTableSheetStyle(file *excelize.File, sheetName string, commonStyle excel
 	file.SetCellStyle(sheetName, "A1", fmt.Sprint("I", (endIdx-1)), style)
 
 	// Row Height
-	file.SetRowHeight(sheetName, 1, 27)
+	file.SetRowHeight(sheetName, titleColNum, 27)
 	height2 := float64(21)
-	for i := 2; i <= 5; i++ {
+	for i := infoColNum1; i <= columnColNum; i++ {
 		file.SetRowHeight(sheetName, i, height2)
 	}
 
-	n := 25 // n := row 마지막 (~컬럼개수+5)
 	height3 := float64(15.75)
-	for i := 6; i <= n; i++ {
+	for i := columnColNum; i < indexColNum; i++ {
 		file.SetRowHeight(sheetName, i, height3)
 	}
 
