@@ -3,7 +3,6 @@ package excel
 import (
 	"fmt"
 	"table-specification/message"
-	"time"
 
 	"github.com/xuri/excelize/v2"
 )
@@ -19,8 +18,17 @@ func ExportExcel(specList map[string][]*message.TableInfo) error {
 		}
 	}()
 
-	// TODO : 표지 생성
-	// TODO : 목차 생성
+	// 표지 생성
+	err = CreateIntroSheet(file)
+	if err != nil {
+		return err
+	}
+
+	// 목차 생성
+	err = CreateListSheet(file, specList)
+	if err != nil {
+		return err
+	}
 
 	// 스키마별로 테이블 시트 생성
 	for schema, tableList := range specList {
@@ -37,11 +45,12 @@ func ExportExcel(specList map[string][]*message.TableInfo) error {
 			}
 		}
 	}
+	err = file.DeleteSheet("Sheet1")
 
 	// 파일 저장
-	date := time.Now().UTC().Local()
-	fileName := "TEST" + fmt.Sprintf("%d", date.Hour()) + fmt.Sprintf("%d", date.Minute()) + fmt.Sprintf("%d", date.Second())
-
+	// date := time.Now().UTC().Local()
+	// fileName := "TEST" + fmt.Sprintf("%d", date.Hour()) + fmt.Sprintf("%d", date.Minute()) + fmt.Sprintf("%d", date.Second())
+	fileName := "Table Specification"
 	err = file.SaveAs(fileName + ".xlsx")
 	if err != nil {
 		return err
