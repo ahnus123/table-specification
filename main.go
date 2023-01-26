@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"table-specification/db"
+	"table-specification/excel"
 	"table-specification/services"
 )
 
@@ -30,6 +31,12 @@ func main() {
 		log.Fatalln(err)
 	}
 	fmt.Println(specList)
+
+	// 테이블 명세서 엑셀로 추출
+	err = excel.ExportExcel(specList)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	// DB 연결 종료
 	db.CloseDB()
